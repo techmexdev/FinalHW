@@ -1,58 +1,57 @@
-"""     James Richardson
-        1555520
-        COSC-1306           """
-#puts the elements of the file into a list
-def createMatrix(inFile, list):
-    for row in inFile:
-        list.append(row)
-#calculates highest number in a list
-def max(list):
+
+inFile = open('data.txt', 'r')
+outFile = open("RowStatistics.txt","w")
+list = []
+
+def createMatrix(file, list):
+    for line in file:
+        list.append(line)
+
+def findMin(row):
+    list = row.split(',')
+    min = int(list[0])
+    for num in list:
+        if(num == '\n'):
+            continue
+        if int(num) < min:
+            min = int(num)
+    return min
+
+def findMax(row):
+    list = row.split(',')
     max = int(list[0])
     for num in list:
+        if (num == '\n'):
+            continue
         if int(num) > max:
             max = int(num)
     return max
-#calculates lowest number in a list
-def min(list):
-    min = int(list[0])
-    for num in list:
-        if int(num) <min:
-            min = int(num)
-    return min
-#computes the average of a list, returns float
-def mean(list):
+
+def findAvg(row):
+    list = row.split(',')
     sum = 0
     for num in list:
+        if (num == '\n'):
+            continue
         sum += int(num)
     return float(sum / len(list))
-#just finds the range, did it the lazy way
-def range(list):
-    return max(list) - min(list)
-#finds the median, he didn't say we couldn't use sort function
-def median(list):
+
+def findRange(row):
+    return findMax(row) - findMin(row)
+
+def findMedian(row):
+    list = row.split(',')
     list.sort()
-    return (list[len(list) / 2])
-#writes to file
-def writeToFile(outFile, list):
-    temp = []
-    temp.append(min(list));temp.append(max(list))
-    temp.append(mean(list));temp.append(range(list))
-    temp.append(median(list))
-    for elm in temp:
-        outFile.write('{}\t'.format(elm))
-    outFile.write('\n')
-
-
-inFile = open("Data.txt")
-outFile = open("RowStatistics.txt","w")
-list = []
+    return (list[2])
 
 createMatrix(inFile, list)
 
 for row in list:
-    writeToFile(outFile, row.split() )
-
-
-
+    outFile.write(str(findMin(row)) + ',')
+    outFile.write(str(findMax(row))  + ',')
+    outFile.write(str(findAvg(row))  + ',')
+    outFile.write(str(findRange(row))  + ',')
+    outFile.write(str(findMedian(row)))
+    outFile.write('\n')
 inFile.close()
 outFile.close()
